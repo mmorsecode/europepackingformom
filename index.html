@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Europe Packing List · Lisbon · Cannes · Paris</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --border: #e8e5df;
+    --text: #1a1a18;
+    --muted: #7a7872;
+    --accent: #1D9E75;
+    --accent-light: #e1f5ee;
+    --accent-dark: #0f6e56;
+    --link: #185fa5;
+    --tag-bg: #f0ede7;
+    --tag-text: #5a5751;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 2rem 1.5rem 1.5rem; text-align: center; }
+  .flag { font-size: 28px; margin-bottom: 0.5rem; }
+  h1 { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: var(--muted); }
+  .meta { display: flex; justify-content: center; gap: 16px; margin-top: 1rem; flex-wrap: wrap; }
+  .badge { background: var(--tag-bg); color: var(--tag-text); font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 99px; }
+  .badge.green { background: var(--accent-light); color: var(--accent-dark); }
+
+  .progress-bar { height: 3px; background: var(--border); position: relative; }
+  .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s ease; }
+
+  main { max-width: 640px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+
+  .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 2rem; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .section { margin-bottom: 2rem; }
+  .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .section-icon { font-size: 16px; }
+  .section-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .section-count { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+  .items { display: flex; flex-direction: column; gap: 6px; }
+  .item { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; cursor: pointer; transition: background 0.1s, opacity 0.2s; -webkit-tap-highlight-color: transparent; }
+  .item:hover { background: #faf9f7; }
+  .item.done { opacity: 0.45; }
+  .item.done .item-name { text-decoration: line-through; }
+
+  .cb { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid #ccc; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
+  .cb.on { background: var(--accent); border-color: var(--accent); }
+  .cb svg { display: none; }
+  .cb.on svg { display: block; }
+
+  .item-body { flex: 1; min-width: 0; }
+  .item-name { font-size: 15px; line-height: 1.4; }
+  .item-note { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .item-link { font-size: 12px; color: var(--link); margin-top: 2px; display: inline-block; text-decoration: none; }
+  .item-link:hover { text-decoration: underline; }
+
+  .carry-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+  .carry-tag.carry { background: #e6f1fb; color: #185fa5; }
+  .carry-tag.checked { background: #eaf3de; color: #3b6d11; }
+
+  footer { text-align: center; padding: 2rem 1rem; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 400px) {
+    .summary { grid-template-columns: repeat(3,1fr); }
+    h1 { font-size: 19px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="flag">🇵🇹 🇫🇷</div>
+  <h1>Europe Packing List</h1>
+  <div class="subtitle">Lisbon · Cannes · Paris &nbsp;·&nbsp; April 8 – 22, 2026</div>
+  <div class="meta">
+    <span class="badge">✈️ 2 weeks</span>
+    <span class="badge">🌤 ~60–68°F / 15–20°C</span>
+    <span class="badge green" id="packed-badge">0 packed</span>
+  </div>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<main>
+  <div class="summary">
+    <div class="stat"><div class="stat-num" id="s-packed">0</div><div class="stat-label">Packed</div></div>
+    <div class="stat"><div class="stat-num" id="s-left">—</div><div class="stat-label">Remaining</div></div>
+    <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">Total</div></div>
+  </div>
+
+  <div id="sections"></div>
+</main>
+
+<footer>Lisbon · Cannes · Paris · April 2026 &nbsp;·&nbsp; <a href="#">Share this list</a></footer>
+
+<script>
+const data = [
+  {
+    icon: "🛂",
+    title: "Documents & ID",
+    items: [
+      { name: "Passport", note: "Check expiry — must be valid 3+ months after return", bag: "carry" },
+      { name: "Global Entry card", bag: "carry" },
+      { name: "Travel insurance policy info", bag: "carry" },
+      { name: "Hotel + flight confirmations", note: "Printed or downloaded offline", bag: "carry" },
+      { name: "Credit card — no foreign transaction fees", bag: "carry" },
+      { name: "Euros (cash)", note: "Useful for markets, taxis, small cafés", bag: "carry" },
+    ]
+  },
+  {
+    icon: "📋",
+    title: "Pre-trip logistics",
+    items: [
+      { name: "Health insurance coverage", note: "Confirm international coverage" },
+      { name: "Phone plan — international add-on", note: "Activate for the month" },
+      { name: "AirTags — luggage + kid tracker" },
+      { name: "Offline maps downloaded", note: "Google Maps or Maps.me — Lisbon area" },
+    ]
+  },
+  {
+    icon: "👔",
+    title: "Clothing & wedding",
+    items: [
+      { name: "Black-tie ceremony outfit", bag: "checked" },
+      { name: "Cocktail attire — welcome party", bag: "checked" },
+      { name: "Comfortable walking shoes", note: "Lisbon cobblestones are rough on dress shoes", bag: "checked" },
+      { name: "Light jacket or layer", note: "April evenings can be cool (~60°F)", bag: "checked" },
+      { name: "Compact travel umbrella", note: "April has some rain", bag: "checked" },
+    ]
+  },
+  {
+    icon: "🔌",
+    title: "Electronics",
+    items: [
+      { name: "Universal cable adaptor", link: "https://www.amazon.com/dp/B0DQQ8SD9P", bag: "checked" },
+      { name: "Power adaptors", link: "https://www.amazon.com/dp/B0B27HX6P7", bag: "checked" },
+      { name: "Bluetooth TX", link: "https://www.amazon.com/dp/B0FB9P5F1T", bag: "checked" },
+      { name: "HDMI cable", link: "https://www.amazon.com/dp/B0FM7YZCYP", bag: "checked" },
+      { name: "Lipstick portable charger", bag: "carry" },
+      { name: "Noise-canceling headphones or earbuds", bag: "carry" },
+    ]
+  },
+  {
+    icon: "💊",
+    title: "Health & pharmacy",
+    items: [
+      { name: "Prescription medications", note: "Pack in carry-on", bag: "carry" },
+      { name: "OTC basics", note: "Advil, Pepto, Imodium, allergy meds", bag: "carry" },
+      { name: "Sunscreen", note: "Lisbon in April has strong sun", bag: "checked" },
+      { name: "Hand sanitizer + travel wipes", bag: "carry" },
+    ]
+  },
+  {
+    icon: "🎒",
+    title: "Carry-on comfort",
+    items: [
+      { name: "Neck pillow + eye mask", bag: "carry" },
+      { name: "Packing cubes", bag: "checked" },
+      { name: "TSA-approved luggage locks", bag: "checked" },
+      { name: "Small crossbody or day bag", note: "For sightseeing around Lisbon", bag: "checked" },
+
+    ]
+  },
+  {
+    icon: "🎬",
+    title: "Entertainment",
+    items: [
+      { name: "Download movies", note: "Netflix, Apple TV, etc." },
+      { name: "Download books / audiobooks" },
+    ]
+  },
+];
+
+const state = {};
+let total = 0;
+data.forEach(s => s.items.forEach(i => { state[i.name] = false; total++; }));
+
+function updateStats() {
+  const packed = Object.values(state).filter(Boolean).length;
+  const left = total - packed;
+  document.getElementById('s-packed').textContent = packed;
+  document.getElementById('s-left').textContent = left;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('prog').style.width = (packed / total * 100) + '%';
+  document.getElementById('packed-badge').textContent = packed + ' packed';
+}
+
+function buildTag(bag) {
+  if (!bag) return '';
+  const label = bag === 'carry' ? 'carry-on' : 'checked';
+  return `<span class="carry-tag ${bag}">${label}</span>`;
+}
+
+function render() {
+  const container = document.getElementById('sections');
+  container.innerHTML = '';
+  data.forEach(sec => {
+    const secEl = document.createElement('div');
+    secEl.className = 'section';
+    const packed = sec.items.filter(i => state[i.name]).length;
+    secEl.innerHTML = `
+      <div class="section-header">
+        <span class="section-icon">${sec.icon}</span>
+        <span class="section-title">${sec.title}</span>
+        <span class="section-count">${packed}/${sec.items.length}</span>
+      </div>
+      <div class="items" id="sec-${sec.title.replace(/\s+/g,'-')}"></div>`;
+    const itemsEl = secEl.querySelector('.items');
+    sec.items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'item' + (state[item.name] ? ' done' : '');
+      row.innerHTML = `
+        <div class="cb${state[item.name] ? ' on' : ''}">
+          <svg width="11" height="8" viewBox="0 0 11 8" fill="none"><path d="M1 4L4 7L10 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="item-body">
+          <div class="item-name">${item.name}</div>
+          ${item.note ? `<div class="item-note">${item.note}</div>` : ''}
+          ${item.link ? `<a class="item-link" href="${item.link}" target="_blank" onclick="event.stopPropagation()">↗ Amazon</a>` : ''}
+        </div>
+        ${buildTag(item.bag)}`;
+      row.addEventListener('click', () => {
+        state[item.name] = !state[item.name];
+        render();
+        updateStats();
+      });
+      itemsEl.appendChild(row);
+    });
+    container.appendChild(secEl);
+  });
+}
+
+render();
+updateStats();
+</script>
+</body>
+</html>
